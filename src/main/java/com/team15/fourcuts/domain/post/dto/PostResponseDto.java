@@ -14,7 +14,6 @@ public class PostResponseDto {
     private String photo_three;
     private String photo_four;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
 
     public PostResponseDto(Post post){
         this.username = post.getUsername();
@@ -25,7 +24,5 @@ public class PostResponseDto {
         this.photo_three = post.getPhoto_three();
         this.photo_four = post.getPhoto_four();
         this.createdAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
     }
-
 }
