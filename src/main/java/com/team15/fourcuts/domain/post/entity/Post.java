@@ -1,13 +1,16 @@
 package com.team15.fourcuts.domain.post.entity;
 
+import com.team15.fourcuts.domain.post.dto.PostRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,4 +50,14 @@ public class Post {
     @UpdateTimestamp
     @Column(updatable = false)
     LocalDateTime modifiedAt;
+
+    public Post(PostRequestDto postRequestDto, List<MultipartFile> photos){
+        this.username = postRequestDto.username();
+        this.title = postRequestDto.title();
+        this.content = postRequestDto.content();
+        this.photo_one = photos.get(0).getOriginalFilename();
+        this.photo_two = photos.get(1).getOriginalFilename();
+        this.photo_three = photos.get(2).getOriginalFilename();
+        this.photo_four = photos.get(3).getOriginalFilename();
+    }
 }
