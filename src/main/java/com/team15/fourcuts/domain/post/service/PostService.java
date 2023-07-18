@@ -1,6 +1,5 @@
 package com.team15.fourcuts.domain.post.service;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -16,13 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final AmazonS3Client amazonS3Client;
-    private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -42,27 +42,32 @@ public class PostService {
 
     //업로드
     public MessageResponseDto upload(PostRequestDto postRequestDto, List<MultipartFile> photos) throws IOException {
-        validateFileExists(photos);
+        validateFileCounts(photos);
+
+        List<String> uuidFilePaths = new ArrayList<>();
 
         for (MultipartFile photo : photos) {
-            String fileName = photo.getOriginalFilename();
             long size = photo.getSize();
 
             ObjectMetadata objectMetaData = new ObjectMetadata();
             objectMetaData.setContentType(photo.getContentType());
             objectMetaData.setContentLength(size);
 
+            String prefix = UUID.randomUUID().toString();
+            String fileName = prefix + "_" + photo.getOriginalFilename();
+            String bucketFilePath = "photos/" + fileName;
+
             // S3에 업로드
             amazonS3Client.putObject(
-                    new PutObjectRequest(bucketName, fileName, photo.getInputStream(), objectMetaData)
+                    new PutObjectRequest(bucketName, bucketFilePath, photo.getInputStream(), objectMetaData)
                             .withCannedAcl(CannedAccessControlList.PublicRead)
             );
-            String imagePath = amazonS3Client.getUrl(bucketName, fileName).toString(); // 접근가능한 URL 가져오기
-        }
-        Post post = new Post(postRequestDto, photos);
 
-        Post savepost = postRepository.save(post);
-        PostResponseDto postResponseDto = new PostResponseDto(savepost);
+            uuidFilePaths.add(fileName);
+        }
+        Post post = new Post(postRequestDto, uuidFilePaths);
+
+        postRepository.save(post);
 
         return new MessageResponseDto("파일 저장 성공");
 
@@ -76,9 +81,9 @@ public class PostService {
     }
 
         //validateFileExists
-        private void validateFileExists (List < MultipartFile > photos) {
-            if (photos.isEmpty()) {
-                throw new IllegalArgumentException("EmptyFile");
-        }
+        private void validateFileCounts (List < MultipartFile > photos) {
+            if (photos.isEmpty() || photos.size() != 4) {
+                throw new IllegalArgumentException("이미지의 개수가 맞지 않습니다. 4개를 입력해주세요");
+            }
     }
 }
