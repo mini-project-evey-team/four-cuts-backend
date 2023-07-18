@@ -20,7 +20,7 @@ public class PostController {
 
     //게시글 목록조회(전체)
     @GetMapping("/post")
-    public PostPageResponseDto getPost(@RequestParam(name="page") int pageNum){
+    public PostPageResponseDto getPost(@RequestParam(name="page", defaultValue = "1") int pageNum){
         return postService.getPost(pageNum);
     }
 
