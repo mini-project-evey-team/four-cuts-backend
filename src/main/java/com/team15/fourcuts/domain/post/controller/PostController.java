@@ -1,6 +1,7 @@
 package com.team15.fourcuts.domain.post.controller;
 
 import com.team15.fourcuts.domain.post.dto.MessageResponseDto;
+import com.team15.fourcuts.domain.post.dto.PostPageResponseDto;
 import com.team15.fourcuts.domain.post.dto.PostRequestDto;
 import com.team15.fourcuts.domain.post.dto.PostResponseDto;
 import com.team15.fourcuts.domain.post.service.PostService;
@@ -19,8 +20,8 @@ public class PostController {
 
     //게시글 목록조회(전체)
     @GetMapping("/post")
-    public List<PostResponseDto> getPost(){
-        return postService.getPost();
+    public PostPageResponseDto getPost(@RequestParam(name="page") int pageNum){
+        return postService.getPost(pageNum);
     }
 
     //게시글 목록조회(상세)
