@@ -5,32 +5,32 @@ import com.team15.fourcuts.domain.post.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 public class PostResponseDto {
     private Long id;
     private String username;
     private String title;
     private String content;
-    private String photo_one;
-    private String photo_two;
-    private String photo_three;
-    private String photo_four;
+    private List<String> photoUrl;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    public PostResponseDto(Post post){
+    public PostResponseDto(Post post) {
         this.id = post.getId();
         this.username = post.getUsername();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.photo_one = fileNameToURL(post.getPhoto_one());
-        this.photo_two = fileNameToURL(post.getPhoto_two());
-        this.photo_three = fileNameToURL(post.getPhoto_three());
-        this.photo_four = fileNameToURL(post.getPhoto_four());
-        this.createdAt = post.getCreatedAt();
+        this.photoUrl = Arrays.asList(fileNameToURL(post.getPhoto_one()),
+                fileNameToURL(post.getPhoto_two()),
+                fileNameToURL(post.getPhoto_three()),
+                fileNameToURL(post.getPhoto_four()));
 
-        System.out.println("시간: " + this.createdAt);
+        this.createdAt = post.getCreatedAt();
     }
 
     private String fileNameToURL(String fileName){
