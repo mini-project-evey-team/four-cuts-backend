@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,13 +50,13 @@ public class Post {
     @Column(updatable = false)
     LocalDateTime modifiedAt;
 
-    public Post(PostRequestDto postRequestDto, List<MultipartFile> photos){
+    public Post(PostRequestDto postRequestDto, List<String> uuidFileNames){
         this.username = postRequestDto.username();
         this.title = postRequestDto.title();
         this.content = postRequestDto.content();
-        this.photo_one = photos.get(0).getOriginalFilename();
-        this.photo_two = photos.get(1).getOriginalFilename();
-        this.photo_three = photos.get(2).getOriginalFilename();
-        this.photo_four = photos.get(3).getOriginalFilename();
+        this.photo_one = uuidFileNames.get(0);
+        this.photo_two = uuidFileNames.get(1);
+        this.photo_three = uuidFileNames.get(2);
+        this.photo_four = uuidFileNames.get(3);
     }
 }

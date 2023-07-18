@@ -1,5 +1,6 @@
 package com.team15.fourcuts.domain.post.controller;
 
+import com.team15.fourcuts.domain.post.dto.MessageResponseDto;
 import com.team15.fourcuts.domain.post.dto.PostRequestDto;
 import com.team15.fourcuts.domain.post.dto.PostResponseDto;
 import com.team15.fourcuts.domain.post.service.PostService;
@@ -28,9 +29,11 @@ public class PostController {
         return postService.getPostById(id);
     }
 
+    //업로드
     @PostMapping("/post")
-    public void write(@RequestPart("post")PostRequestDto postRequestDto,
-                      @RequestPart("photos") List<MultipartFile> photos) throws IOException {
-        postService.write(postRequestDto, photos);
+    public MessageResponseDto uploadFile(
+            @RequestPart("post") PostRequestDto postRequestDto,
+            @RequestPart("photos") List<MultipartFile> photos) throws IOException {
+        return postService.upload(postRequestDto, photos);
     }
 }
