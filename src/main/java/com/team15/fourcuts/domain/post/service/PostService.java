@@ -4,15 +4,16 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.team15.fourcuts.domain.post.dto.MainPhotoResponseDto;
-import com.team15.fourcuts.domain.post.dto.MessageResponseDto;
-import com.team15.fourcuts.domain.post.dto.PostRequestDto;
-import com.team15.fourcuts.domain.post.dto.PostResponseDto;
+import com.team15.fourcuts.domain.post.dto.*;
 import com.team15.fourcuts.domain.post.entity.Post;
 import com.team15.fourcuts.domain.post.repository.MainPhotoRepository;
 import com.team15.fourcuts.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,8 +34,14 @@ public class PostService {
     private final MainPhotoRepository mainPhotoRepository;
 
     //게시글 목록조회(전체)
-    public List<PostResponseDto> getPost() {
-        return postRepository.findAllByOrderByModifiedAtDesc().stream().map(PostResponseDto::new).toList();
+    public PostPageResponseDto getPost(int pageNum) {
+
+        // 팩토리 메서드를 통해 객체를 생성하는 이유에 대해 이채원님에게 설명해준다.
+        Pageable pageable = PageRequest.of(pageNum - 1,6, Sort.by("modifiedAt"));
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        // map에 대해서도 알아보고 설명해주기.
+        return new PostPageResponseDto(posts.getTotalPages(), pageNum, posts.map(PostResponseDto::new).toList());
     }
 
     //게시글 목록조회(상세)

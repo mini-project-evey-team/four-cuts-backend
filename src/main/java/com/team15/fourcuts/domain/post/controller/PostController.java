@@ -1,9 +1,6 @@
 package com.team15.fourcuts.domain.post.controller;
 
-import com.team15.fourcuts.domain.post.dto.MainPhotoResponseDto;
-import com.team15.fourcuts.domain.post.dto.MessageResponseDto;
-import com.team15.fourcuts.domain.post.dto.PostRequestDto;
-import com.team15.fourcuts.domain.post.dto.PostResponseDto;
+import com.team15.fourcuts.domain.post.dto.*;
 import com.team15.fourcuts.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +23,8 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public List<PostResponseDto> getPost(){
-        return postService.getPost();
+    public PostPageResponseDto getPost(@RequestParam(name="page", defaultValue = "1") int pageNum){
+        return postService.getPost(pageNum);
     }
 
     //게시글 목록조회(상세)
