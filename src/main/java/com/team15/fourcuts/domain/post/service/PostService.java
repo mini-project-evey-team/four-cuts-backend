@@ -4,10 +4,12 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.team15.fourcuts.domain.post.dto.MainPhotoResponseDto;
 import com.team15.fourcuts.domain.post.dto.MessageResponseDto;
 import com.team15.fourcuts.domain.post.dto.PostRequestDto;
 import com.team15.fourcuts.domain.post.dto.PostResponseDto;
 import com.team15.fourcuts.domain.post.entity.Post;
+import com.team15.fourcuts.domain.post.repository.MainPhotoRepository;
 import com.team15.fourcuts.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +30,7 @@ public class PostService {
     private String bucketName;
 
     private final PostRepository postRepository;
+    private final MainPhotoRepository mainPhotoRepository;
 
     //게시글 목록조회(전체)
     public List<PostResponseDto> getPost() {
@@ -85,5 +88,9 @@ public class PostService {
             if (photos.isEmpty() || photos.size() != 4) {
                 throw new IllegalArgumentException("이미지의 개수가 맞지 않습니다. 4개를 입력해주세요");
             }
+    }
+
+    public MainPhotoResponseDto getMainPhotos() {
+        return new MainPhotoResponseDto(mainPhotoRepository.findAll());
     }
 }

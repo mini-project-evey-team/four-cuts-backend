@@ -1,5 +1,6 @@
 package com.team15.fourcuts.domain.post.controller;
 
+import com.team15.fourcuts.domain.post.dto.MainPhotoResponseDto;
 import com.team15.fourcuts.domain.post.dto.MessageResponseDto;
 import com.team15.fourcuts.domain.post.dto.PostRequestDto;
 import com.team15.fourcuts.domain.post.dto.PostResponseDto;
@@ -18,6 +19,12 @@ public class PostController {
     private final PostService postService;
 
     //게시글 목록조회(전체)
+
+    @GetMapping("/main/photo")
+    public MainPhotoResponseDto getMainPhotos(){
+        return postService.getMainPhotos();
+    }
+
     @GetMapping("/post")
     public List<PostResponseDto> getPost(){
         return postService.getPost();
