@@ -14,6 +14,9 @@ pipeline {
             git url: 'git@github.com:mini-project-evey-team/four-cuts-backend.git',
               branch: 'main',
               credentialsId: 'github'
+            dir('.'){
+              sh 'git submodule update --init --recursive'
+              }
             }
             post {
              success { 
