@@ -1,0 +1,3 @@
+[submodule "four-cuts-backend-security"]
+	path = four-cuts-backend-security
+	url = https://github.com/mini-project-evey-team/four-cuts-backend-security.git
