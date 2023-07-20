@@ -10,6 +10,7 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
+                deleteDir()
                 withCredentials([GitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
                     sh '''
                     [ -d bin ] || git clone --recursive https://github.com/mini-project-evey-team/four-cuts-backend.git
