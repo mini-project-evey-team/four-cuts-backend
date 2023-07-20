@@ -10,11 +10,9 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                deleteDir()
                 withCredentials([GitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
                     sh '''
                     [ -d bin ] || git clone --recursive https://github.com/mini-project-evey-team/four-cuts-backend.git
-                    git pull --recurse-submodules
                     '''
                 }
             }
@@ -73,6 +71,7 @@ pipeline {
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@3.35.216.160 'docker ps -q --filter 'name=four-cut' | grep -q . && docker stop four-cut && docker rm -fv four-cut || [ \$? = 1 ]'"
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@3.35.216.160 'docker run -d --name four-cut -p 8080:8080 ironprayer1208/four-cut'"
                 }
+                deleteDir()
             }
         }
     }
