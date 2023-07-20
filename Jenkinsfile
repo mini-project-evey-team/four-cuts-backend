@@ -9,20 +9,14 @@ pipeline {
 
     stages {
         stage('Prepare') {
-          steps {
-            echo 'Clonning Repository'
-            git url: 'git@github.com:mini-project-evey-team/four-cuts-backend.git',
-              branch: 'main',
-              credentialsId: 'github'
+            steps {
+                withCredentials([GitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+                    sh '''
+                    [ -d bin ] || git clone --recursive https://github.com/mini-project-evey-team/four-cuts-backend.git
+                    git pull --recurse-submodules
+                    '''
+                }
             }
-            post {
-             success { 
-              echo 'Successfully Cloned Repository'
-             }
-          	 failure {
-              error 'This pipeline stops here...'
-             }
-          }
         }
 
         stage('Bulid Gradle') {
