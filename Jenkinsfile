@@ -28,7 +28,7 @@ pipeline {
         stage('Bulid Gradle') {
           steps {
             echo 'Bulid Gradle'
-            dir('.'){
+            dir('./four-cuts-backend'){
                 sh 'chmod +x gradlew'
                 sh './gradlew clean build'
             }
